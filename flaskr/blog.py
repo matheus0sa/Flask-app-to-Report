@@ -128,21 +128,37 @@ def delete(id):
     return redirect(url_for("blog.index"))
 
 
-def get_report(apelido):
+def get_report(nick):
+    
     from . import reports
   
     # Atribui a classe a uma variável
-    relatorio = getattr(reports, apelido)
+    relatorio = getattr(reports, nick)
 
     # Agora você pode usar a classe como desejar
     return relatorio()
 
-@bp.route("/relatorios/<apelido>")
+@bp.route("/view/<nick>")
 @login_required
-def relatorios(apelido):
-    """Mosta um relatório
-
-    """
-    df = get_report(apelido)
-
+def view(nick):
+    df = get_report(nick)
     return df.to_html()
+
+
+@bp.route("/inserir")
+@login_required
+def inserir(nick):
+    return 'To do'
+
+
+
+@bp.route("/replace/<nick>")
+@login_required
+def replace(nick):
+    return 'To do'
+
+
+@bp.route("/deleteR/<nick>")
+@login_required
+def deleteR(nick):
+    return 'To do'
