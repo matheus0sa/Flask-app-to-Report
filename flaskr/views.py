@@ -1,16 +1,19 @@
-from flask import Blueprint
-from flask import flash
-from flask import g
-from flask import redirect
 from flask import render_template
+from flask import Blueprint
+from flask import redirect
 from flask import request
 from flask import url_for
+from flask import flash
+from flask import g
+
 from werkzeug.exceptions import abort
 
 from .auth import login_required
 from .db import get_db
 
-bp = Blueprint("blog", __name__)
+import os
+
+bp = Blueprint("reports", __name__)
 
 
         
@@ -19,13 +22,8 @@ bp = Blueprint("blog", __name__)
 @bp.route("/")
 def index():
     """Show all the posts, most recent first."""
-    db = get_db()
-    posts = db.execute(
-        "SELECT p.id, title, body, created, author_id, username"
-        " FROM post p JOIN user u ON p.author_id = u.id"
-        " ORDER BY created DESC"
-    ).fetchall()
-    return render_template("blog/index.html", posts=posts)
+    reports = os.listdir('flaskr/scripts')
+    return render_template("reports/index.html", reports=reports)
 
 
 def get_post(id, check_author=True):
@@ -81,9 +79,9 @@ def create():
                 (title, body, g.user["id"]),
             )
             db.commit()
-            return redirect(url_for("blog.index"))
+            return redirect(url_for("report.index"))
 
-    return render_template("blog/create.html")
+    return render_template("report/create.html")
 
 
 @bp.route("/<int:id>/update", methods=("GET", "POST"))
@@ -108,9 +106,9 @@ def update(id):
                 "UPDATE post SET title = ?, body = ? WHERE id = ?", (title, body, id)
             )
             db.commit()
-            return redirect(url_for("blog.index"))
+            return redirect(url_for("report.index"))
 
-    return render_template("blog/update.html", post=post)
+    return render_template("report/update.html", post=post)
 
 
 @bp.route("/<int:id>/delete", methods=("POST",))
@@ -125,7 +123,7 @@ def delete(id):
     db = get_db()
     db.execute("DELETE FROM post WHERE id = ?", (id,))
     db.commit()
-    return redirect(url_for("blog.index"))
+    return redirect(url_for("report.index"))
 
 
 def get_report(nick):

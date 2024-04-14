@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+
+{% block header %}
+  <h1>{% block title %}Posts{% endblock %}</h1>
+  {% if g.user %}
+    <a class="action" href="{{ url_for('reports.create') }}">New</a>
+  {% endif %}
+{% endblock %}
+
+{% block content %}
+  {% for report in reports %}
+    <article class="post">
+      <header>
+        <a href=" {{ url_for ('reports.view', nick=report[:-3])}}">
+          <div>
+            <h1>{{ report[:-3] }}</h1>
+          </div>
+        </a>
+       
+               
+      </header>
+    </article>
+    {% if not loop.last %}
+      <hr>
+    {% endif %}
+  {% endfor %}
+{% endblock %}
