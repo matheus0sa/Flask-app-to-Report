@@ -130,25 +130,32 @@ def delete(id):
 
 def get_report(nick):
     
-    from . import reports
-  
-    # Atribui a classe a uma variável
-    relatorio = getattr(reports, nick)
+    f = open(f'flaskr/scripts/{nick}.py', 'r')
+    f_plaintext = f.read()
+    f.close()
 
-    # Agora você pode usar a classe como desejar
-    return relatorio()
+    exec(f_plaintext)
+
+    return locals()['R']()
 
 @bp.route("/view/<nick>")
 @login_required
 def view(nick):
     df = get_report(nick)
-    return df.to_html()
+    df = df.to_html(max_rows=30, max_cols=10, justify='center', show_dimensions=True)
+    return render_template("reports/report.html", df=df, nick=nick.capitalize())
 
 
-@bp.route("/inserir")
+@bp.route("/inserir", methods=("GET", "POST"))
 @login_required
-def inserir(nick):
-    return 'To do'
+def inserir():
+    if request.method == "POST":
+        nick = request.form["nick"]
+        file = request.files['file']
+        file.save(f'flaskr/scripts/{nick}.py')
+        print(nick)
+        print(file)
+    return render_template("reports/insert.html")
 
 
 
