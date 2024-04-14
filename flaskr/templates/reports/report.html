@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+
+{% block header %}
+    <h1>Relatório {{nick}}</h1>
+{% endblock %}
+
+{% block content %}
+    <br>
+    {{ df|safe }}
+{% endblock %}
+

@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+
+{% block header %}
+  <h1>Inserir novo relatório</h1>
+{% endblock %}
+
+{% block content %}
+<br>
+  <form method="post" enctype="multipart/form-data">
+    <label for="nick">Nick</label>
+    <input name="nick" id="nick" value="{{ request.form['nick'] }}" required>
+    <label for="file">Body</label>
+    <input type="file" name="file" id="file">
+    <input type="submit" value="Save">
+  </form>
+{% endblock %}
